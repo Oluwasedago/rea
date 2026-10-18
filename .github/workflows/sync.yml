@@ -1,0 +1,26 @@
+name: Auto-Sync Fork
+
+on:
+  schedule:
+    # Runs every day at midnight UTC
+    - cron: '0 0 * * *'
+  # Allows you to manually trigger it anytime from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Sync upstream changes
+        uses: aormsby/Fork-Sync-With-Upstream-Action@v3.4.1
+        with:
+          upstream_sync_repo: morluto/rea
+          upstream_sync_branch: main
+          target_branch: main
+          test_mode: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
